@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Oubon × TikTok Demo</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root{
+      --bg:#0b0d10;--panel:#11151b;--muted:#98a2b3;--text:#e6e7eb;--brand:#23d5ec;--accent:#ff3d67;--ok:#14b8a6;
+      --ring:rgba(35,213,236,.35);--card:#0f1318
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:linear-gradient(180deg,#0b0d10 0%,#0b0d10 60%,#0d1218 100%); color:var(--text);
+      display:flex; align-items:center; justify-content:center; padding:32px
+    }
+    .shell{width:100%; max-width:980px}
+    .card{
+      background:linear-gradient(180deg,var(--panel),var(--card));
+      border:1px solid rgba(255,255,255,.06); border-radius:20px; padding:28px; box-shadow:0 10px 30px rgba(0,0,0,.35)
+    }
+    header{display:flex; align-items:center; gap:16px; margin-bottom:8px}
+    .logo{width:44px; height:44px; border-radius:12px; background:
+      radial-gradient(120% 120% at 0% 100%,#69f 0%,transparent 40%),
+      radial-gradient(120% 120% at 100% 0%,#ff3d67 0%,transparent 40%),
+      linear-gradient(135deg,#222 0%,#111 100%); display:grid; place-items:center}
+    .logo span{font-weight:700; letter-spacing:.2px}
+    h1{font-size:20px; margin:0}
+    p{margin:8px 0; color:var(--muted)}
+    .grid{display:grid; grid-template-columns:1.1fr .9fr; gap:22px; margin-top:18px}
+    .panel{background:#0e1217; border-radius:16px; border:1px solid rgba(255,255,255,.06); padding:18px}
+    .muted{color:var(--muted)}
+    .row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+    .chip{font:600 12px/1.9 system-ui; color:#0b0d10; background:var(--brand); border-radius:999px; padding:2px 10px}
+    .status{display:inline-flex; align-items:center; gap:8px; font-weight:600}
+    .dot{width:10px; height:10px; border-radius:999px; background:#aaa; box-shadow:0 0 0 4px rgba(255,255,255,.03) inset}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.08);
+      background:#0f141a; color:var(--text); text-decoration:none; cursor:pointer;
+      transition:transform .05s ease, box-shadow .2s ease, border-color .2s ease
+    }
+    .btn:hover{transform:translateY(-1px); border-color:var(--ring); box-shadow:0 10px 24px var(--ring)}
+    .btn.primary{background:linear-gradient(180deg,#111,#0e1319); border-color:rgba(35,213,236,.5)}
+    code{background:#0f141a; padding:3px 6px; border-radius:8px; border:1px solid rgba(255,255,255,.06)}
+    ul{margin:10px 0 0 18px}
+    .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px}
+    .kpi{background:#0f141a; border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,.06)}
+    .kpi b{font-size:18px}
+    .footer{margin-top:18px; font-size:13px}
+    a.text{color:#a5e4ff}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="card">
+      <header>
+        <div class="logo" aria-hidden="true"><span>🅾️</span></div>
+        <div>
+          <h1>Oubon × TikTok Integration Demo</h1>
+          <p>Static walkthrough for TikTok Developer review — Login Kit + Share Kit + Content Posting API (video.upload) coverage.</p>
+        </div>
+      </header>
+
+      <div class="grid">
+        <!-- Left: Live demo controls (static-friendly) -->
+        <section class="panel">
+          <div class="row" style="justify-content:space-between">
+            <div class="status"><span class="dot" id="dot"></span><span id="conn">Checking…</span></div>
+            <span class="chip">Sandbox</span>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <!-- Connect/Login -->
+          <div class="row">
+            <a id="loginBtn" class="btn primary"
+               href="https://www.tiktok.com/v2/auth/authorize/?client_key=awfl4ben3ftbj54c&response_type=code&redirect_uri=https%3A%2F%2Fapp.oubonshop.com%2Fdemo%2Foauth.html&scope=user.info.basic%2Cvideo.upload&state=oub">
+              🔐 Connect with TikTok
+            </a>
+            <button id="resetBtn" class="btn" type="button">Reset demo</button>
+          </div>
+
+          <div style="height:16px"></div>
+          <div class="kpis">
+            <div class="kpi"><div class="muted">Selected scopes</div><b>user.info.basic, video.upload</b></div>
+            <div class="kpi"><div class="muted">Login Kit</div><b>OAuth 2.0 code</b></div>
+            <div class="kpi"><div class="muted">Posting</div><b>Sandbox-only</b></div>
+          </div>
+
+          <div style="height:16px"></div>
+          <div class="panel" style="background:#0c1015">
+            <b>What happens after “Connect”</b>
+            <ol>
+              <li>User signs in on TikTok (Login Kit).</li>
+              <li>TikTok redirects to <code>https://app.oubonshop.com/demo/oauth.html</code>.</li>
+              <li>Demo stores a “connected” flag (for review) and shows success.</li>
+              <li>From there, a merchant could grant posting permission (video.upload) and share products (Share Kit).</li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- Right: Feature checklist & links -->
+        <aside class="panel">
+          <b>Scope & product coverage</b>
+          <ul>
+            <li><b>Login Kit</b>: OAuth flow with <code>client_key</code>, <code>redirect_uri</code>, and <code>state</code>.</li>
+            <li><b>Content Posting API</b> (<code>video.upload</code>): shows post-upload step concept (sandbox).</li>
+            <li><b>Share Kit</b>: “Share product to TikTok” concept (UI only here for review).</li>
+            <li><b>Display API</b>: basic profile display after login (UI slot reserved).</li>
+          </ul>
+
+          <div style="height:16px"></div>
+          <b>Helpful links</b>
+          <ul>
+            <li><a class="text" href="https://policies.oubonshop.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a></li>
+            <li><a class="text" href="https://policies.oubonshop.com/terms.html" target="_blank" rel="noopener">Terms of Service</a></li>
+            <li><a class="text" href="mailto:support@oubonshop.com">support@oubonshop.com</a></li>
+          </ul>
+
+          <div class="footer muted">
+            For review, this page is static and logs only demo state in your browser (no server secrets or tokens here).
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Demo-only state: mark connected if TikTok sent us back with ?code=...
+    (function () {
+      const url = new URL(location.href);
+      const hasCode = url.searchParams.has("code") || url.searchParams.get("connected")==="1";
+      if (hasCode) {
+        localStorage.setItem("tiktok_connected", "1");
+        // strip query for a clean URL on refresh
+        if (url.search) history.replaceState({}, "", location.pathname);
+      }
+      const connected = localStorage.getItem("tiktok_connected") === "1";
+      const dot = document.getElementById("dot");
+      const conn = document.getElementById("conn");
+      if (connected) {
+        dot.style.background = "var(--ok)";
+        conn.textContent = "Connected to TikTok (demo)";
+      } else {
+        dot.style.background = "var(--accent)";
+        conn.textContent = "Not connected";
+      }
+      document.getElementById("resetBtn").onclick = () => {
+        localStorage.removeItem("tiktok_connected");
+        location.reload();
+      };
+    })();
+  </script>
+</body>
+</html>
