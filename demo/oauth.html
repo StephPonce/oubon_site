@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TikTok OAuth Return · Oubon</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root{--bg:#0b0d10;--panel:#11151b;--text:#e6e7eb;--ok:#14b8a6;--warn:#ff3d67}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:linear-gradient(180deg,#0b0d10 0%,#0b0d10 60%,#0d1218 100%); color:var(--text);
+      display:flex; align-items:center; justify-content:center; padding:32px
+    }
+    .card{max-width:760px;width:100%; background:linear-gradient(180deg,#11151b,#0f1318);
+      border:1px solid rgba(255,255,255,.06); border-radius:20px; padding:28px; text-align:center}
+    h1{margin:0 0 10px; font-size:28px}
+    p{margin:10px 0 0; opacity:.9}
+    .ok{color:var(--ok); font-weight:700}
+    .warn{color:var(--warn); font-weight:700}
+    .actions{margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+    a.btn,button.btn{appearance:none; border:1px solid rgba(255,255,255,.15); background:#0c1116;
+      padding:10px 14px; border-radius:10px; color:var(--text); text-decoration:none; font-weight:600}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>TikTok OAuth Return</h1>
+    <p id="status">Processing redirect…</p>
+    <div class="actions">
+      <a class="btn" href="/demo/">Back to demo</a>
+      <button class="btn" id="reset" type="button">Reset demo state</button>
+    </div>
+    <p class="mono" id="details"></p>
+  </main>
+
+  <script>
+    (function () {
+      const q = new URLSearchParams(location.search);
+      const code = q.get("code");
+      const state = q.get("state");
+      const err = q.get("error") || q.get("error_description");
+
+      const status = document.getElementById("status");
+      const details = document.getElementById("details");
+
+      if (err) {
+        status.innerHTML = 'Login finished: <span class="warn">ERROR</span>';
+        details.textContent = err;
+        localStorage.removeItem("tiktok_connected");
+        return;
+      }
+
+      if (code) {
+        // For demo only: mark as connected & stash auth code (no token exchange here).
+        localStorage.setItem("tiktok_connected", "true");
+        localStorage.setItem("tiktok_auth_code", code);
+        if (state) localStorage.setItem("tiktok_state", state);
+
+        status.innerHTML = 'Login finished: <span class="ok">CONNECTED</span>';
+        details.textContent = "code=" + code + (state ? "  state=" + state : "");
+      } else {
+        status.textContent = "No ?code present. Re-run the flow from the demo page.";
+      }
+
+      document.getElementById("reset").addEventListener("click", function () {
+        ["tiktok_connected","tiktok_auth_code","tiktok_state"].forEach(k => localStorage.removeItem(k));
+        status.textContent = "Demo state reset.";
+        details.textContent = "";
+      });
+    })();
+  </script>
+</body>
+</html>
