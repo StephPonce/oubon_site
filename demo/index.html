@@ -874,28 +874,9 @@
     }
 
     // Initiate TikTok OAuth login - Backend generates the URL
-    async function initiateLogin() {
-      try {
-        // Call backend to generate OAuth URL with proper credentials
-        const response = await fetch(`${API_BASE}/api/tiktok/auth/url`);
-        const data = await response.json();
-
-        if (data.authorization_url) {
-          // Save state for CSRF protection
-          localStorage.setItem('oauth_state', data.state);
-
-          console.log('🔗 Redirecting to TikTok OAuth...');
-          console.log('Authorization URL:', data.authorization_url);
-
-          // Redirect to TikTok authorization page
-          window.location.href = data.authorization_url;
-        } else {
-          alert('❌ Failed to start OAuth flow\n\nError: ' + (data.error || 'Unknown error'));
-        }
-      } catch (error) {
-        console.error('OAuth initiation failed:', error);
-        alert('❌ Error starting authentication\n\n' + error.message);
-      }
+    function initiateLogin() {
+      // Direct redirect to working OAuth URL
+      window.location.href = 'https://www.tiktok.com/v2/auth/authorize?client_key=sbaw59l3h8nyxmkplb&response_type=code&scope=user.info.basic%2Cuser.info.profile%2Cuser.info.stats%2Cvideo.list%2Cvideo.upload%2Cvideo.publish&redirect_uri=https%3A%2F%2Fpolicies.oubonshop.com%2Fauth%2Ftiktok%2Fcallback.html&state=' + Math.random().toString(36).substring(7);
     }
 
     // Handle OAuth callback
