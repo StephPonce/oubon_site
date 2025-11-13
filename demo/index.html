@@ -875,8 +875,8 @@
 
     // Initiate TikTok OAuth login - Backend generates the URL
     function initiateLogin() {
-      // Direct redirect to working OAuth URL
-      window.location.href = 'https://www.tiktok.com/v2/auth/authorize?client_key=sbaw59l3h8nyxmkplb&response_type=code&scope=user.info.basic%2Cuser.info.profile%2Cuser.info.stats%2Cvideo.list%2Cvideo.upload%2Cvideo.publish&redirect_uri=https%3A%2F%2Fpolicies.oubonshop.com%2Fauth%2Ftiktok%2Fcallback.html&state=' + Math.random().toString(36).substring(7);
+      // Direct redirect to TikTok OAuth
+      window.location.href = 'https://www.tiktok.com/v2/auth/authorize?client_key=sbaw59l3h8nyxmkplb&response_type=code&scope=user.info.basic%2Cuser.info.profile%2Cuser.info.stats%2Cvideo.list%2Cvideo.upload%2Cvideo.publish&redirect_uri=https%3A%2F%2Fpolicies.oubonshop.com%2Fauth%2Ftiktok%2Fcallback.html&state=LdBwLVyqfljI_rcvCmT0wZJWXeHOt21NuMHIRuhsoM8';
     }
 
     // Handle OAuth callback
