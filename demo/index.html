@@ -821,6 +821,18 @@
     // Backend API configuration - ALL requests go through your FastAPI backend
     const API_BASE = 'https://blond-ross-ticket-duplicate.trycloudflare.com';
 
+    // Debug: Intercept all fetch calls
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+        console.log('🔍 FETCH CALL:', args[0]);
+        return originalFetch.apply(this, args).then(response => {
+            return response.clone().json().then(data => {
+                console.log('📥 RESPONSE:', data);
+                return response;
+            }).catch(() => response);
+        });
+    };
+
     // Initialize on page load
     window.addEventListener('DOMContentLoaded', () => {
       checkAuthState();
