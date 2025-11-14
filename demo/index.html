@@ -873,10 +873,25 @@
       }
     }
 
-    // Initiate TikTok OAuth login - Backend generates the URL
+    // Initiate TikTok OAuth login
     function initiateLogin() {
-      // Direct redirect to TikTok OAuth
-      window.location.href = 'https://www.tiktok.com/v2/auth/authorize?client_key=sbaw59l3h8nyxmkplb&response_type=code&scope=user.info.basic%2Cuser.info.profile%2Cuser.info.stats%2Cvideo.list%2Cvideo.upload%2Cvideo.publish&redirect_uri=https%3A%2F%2Fpolicies.oubonshop.com%2Fauth%2Ftiktok%2Fcallback.html&state=LdBwLVyqfljI_rcvCmT0wZJWXeHOt21NuMHIRuhsoM8';
+      // Generate random state for CSRF
+      const state = Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('oauth_state', state);
+
+      // Build OAuth URL with Sandbox credentials
+      const params = new URLSearchParams({
+        client_key: 'sbaw59l3h8nyxmkplb',
+        response_type: 'code',
+        scope: 'user.info.basic,user.info.profile,user.info.stats,video.list,video.upload,video.publish',
+        redirect_uri: 'https://policies.oubonshop.com/auth/tiktok/callback.html',
+        state: state
+      });
+
+      const authUrl = `https://www.tiktok.com/v2/auth/authorize?${params.toString()}`;
+
+      // Redirect to TikTok
+      window.location.href = authUrl;
     }
 
     // Handle OAuth callback
